@@ -1,6 +1,6 @@
 <template>
   <div class="about-page">
-    ы <button @click="$router.back()" class="back-button">← Вернуться назад</button>
+    <button @click="$router.back()" class="back-button">← Вернуться назад</button>
 
     <h1 class="page-title">О нас</h1>
 

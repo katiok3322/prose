@@ -9,10 +9,15 @@
         </div>
 
         <div class="telegram-section">
-          <a href="https://t.me/+f-zklbsx0sU2M2Ji" target="_blank" class="tg-minimal">
+          <a href="https://t.me/PROSESITE" target="_blank" class="tg-minimal">
             <img src="@/assets/tg.png" alt="Telegram" class="tg-minimal-icon" />
             <span>Наш канал</span>
           </a>
+
+          <div class="additional-links">
+            <a href="/contacts" class="additional-link">Контакты</a>
+            <a href="/privacy" class="additional-link">Политика конфиденциальности</a>
+          </div>
         </div>
       </div>
 
@@ -91,7 +96,15 @@ onMounted(() => {
 
 .telegram-section {
   display: flex;
+  flex-direction: column;
   align-items: center;
+  gap: 15px;
+}
+
+@media (min-width: 768px) {
+  .telegram-section {
+    align-items: flex-end;
+  }
 }
 
 .tg-minimal {
@@ -123,6 +136,47 @@ onMounted(() => {
   opacity: 1;
 }
 
+.additional-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .additional-links {
+    justify-content: flex-end;
+  }
+}
+
+.additional-link {
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.additional-link:hover {
+  color: #333;
+}
+
+.additional-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #666;
+  transition: width 0.2s ease;
+}
+
+.additional-link:hover::after {
+  width: 100%;
+}
+
 .bottom-row {
   padding-top: 15px;
   border-top: 1px solid #eee;
@@ -143,39 +197,9 @@ onMounted(() => {
   }
 }
 
-.legal-links {
-  display: flex;
-  gap: 20px;
-}
-
-.legal-link:hover {
-  color: #333;
-}
-
-.legal-link::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: #666;
-  transition: width 0.2s ease;
-}
-
-.legal-link:hover::after {
-  width: 100%;
-}
-
 @media (max-width: 767px) {
   .footer-minimal {
     padding: 20px 0;
-  }
-
-  .legal-links {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
   }
 
   .tg-minimal span {
@@ -184,6 +208,10 @@ onMounted(() => {
 
   .tg-minimal {
     padding: 8px;
+  }
+
+  .additional-links {
+    gap: 15px;
   }
 }
 
@@ -197,6 +225,11 @@ onMounted(() => {
   .brand-dot {
     display: none;
   }
+
+  .additional-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
 }
 </style>
-Ы

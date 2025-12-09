@@ -1,8 +1,11 @@
 <template>
   <div class="register-page">
     <button @click="goBack" class="back-btn">← Вернуться назад</button>
-
     <h1 class="page-title">Регистрация</h1>
+
+    <div v-if="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
 
     <div class="register-container">
       <form @submit.prevent="handleRegister" class="register-form">
@@ -77,19 +80,13 @@
         </div>
 
         <div class="agreement">
-          <input
-            v-model="form.agreeTerms"
-            type="checkbox"
-            id="terms"
-            class="checkbox"
-            required
-          />
+          <input v-model="form.agreeTerms" type="checkbox" id="terms" class="checkbox" />
           <label for="terms" class="agreement-label">
             Я согласен с условиями обработки данных
           </label>
         </div>
 
-        <button type="submit" class="register-btn" :disabled="isLoading">
+        <button type="submit" class="register-btn">
           {{ isLoading ? "Регистрация..." : "Зарегистрироваться" }}
         </button>
 
@@ -103,7 +100,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -120,10 +117,7 @@ const form = ref({
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 const isLoading = ref(false);
-
-const passwordsMatch = computed(() => {
-  return form.value.password === form.value.confirmPassword;
-});
+const errorMessage = ref("");
 
 function togglePassword() {
   showPassword.value = !showPassword.value;
@@ -138,24 +132,37 @@ function goBack() {
 }
 
 async function handleRegister() {
-  if (
-    !form.value.name ||
-    !form.value.email ||
-    !form.value.phone ||
-    !form.value.password ||
-    !form.value.confirmPassword
-  ) {
-    alert("Пожалуйста, заполните все обязательные поля");
+  console.log("Начало регистрации с данными:", form.value);
+
+  errorMessage.value = "";
+
+  if (!form.value.name) {
+    errorMessage.value = "Введите имя";
+    return;
+  }
+
+  if (!form.value.email) {
+    errorMessage.value = "Введите email";
+    return;
+  }
+
+  if (!form.value.phone) {
+    errorMessage.value = "Введите телефон";
+    return;
+  }
+
+  if (!form.value.password) {
+    errorMessage.value = "Введите пароль";
+    return;
+  }
+
+  if (form.value.password !== form.value.confirmPassword) {
+    errorMessage.value = "Пароли не совпадают";
     return;
   }
 
   if (!form.value.agreeTerms) {
-    alert("Необходимо согласиться с условиями обработки данных");
-    return;
-  }
-
-  if (!passwordsMatch.value) {
-    alert("Пароли не совпадают");
+    errorMessage.value = "Необходимо согласиться с условиями";
     return;
   }
 
@@ -173,16 +180,16 @@ async function handleRegister() {
     };
 
     localStorage.setItem("userData", JSON.stringify(userData));
-
     localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("userLogin", form.value.email);
+
+    console.log("Данные сохранены в localStorage");
 
     alert(`✅ Регистрация прошла успешно!\nДобро пожаловать, ${form.value.name}!`);
 
     router.push("/");
   } catch (error) {
     console.error("Ошибка регистрации:", error);
-    alert("❌ Ошибка регистрации");
+    errorMessage.value = "Ошибка регистрации. Попробуйте еще раз.";
   } finally {
     isLoading.value = false;
   }
@@ -195,6 +202,17 @@ async function handleRegister() {
   margin: 0 auto;
   padding: 30px 20px;
   min-height: 100vh;
+}
+
+.error-message {
+  background-color: #ffebee;
+  border: 1px solid #ffcdd2;
+  color: #c62828;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 .back-btn {
@@ -230,7 +248,7 @@ async function handleRegister() {
 .register-form {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 20px;
 }
 
 .input-group {
@@ -255,6 +273,7 @@ async function handleRegister() {
   color: #333;
   transition: all 0.3s;
   box-sizing: border-box;
+  width: 100%;
 }
 
 .form-input:focus,
@@ -271,11 +290,6 @@ async function handleRegister() {
 
 .password-wrapper {
   position: relative;
-}
-
-.password-input {
-  width: 100%;
-  padding-right: 50px;
 }
 
 .toggle-password {
@@ -302,7 +316,6 @@ async function handleRegister() {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: -10px;
 }
 
 .checkbox {
@@ -334,14 +347,9 @@ async function handleRegister() {
   margin-top: 10px;
 }
 
-.register-btn:hover:not(:disabled) {
+.register-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-}
-
-.register-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 .login-section {
@@ -367,6 +375,7 @@ async function handleRegister() {
 .login-link:hover {
   text-decoration: underline;
 }
+
 @media (max-width: 768px) {
   .register-page {
     padding: 20px 15px;

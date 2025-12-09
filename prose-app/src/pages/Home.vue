@@ -13,7 +13,7 @@
 
             <div class="cta-pill">
               <a
-                href="https://t.me/+f-zklbsx0sU2M2Ji"
+                href="https://t.me/PROSESITE"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="telegram-widget"
