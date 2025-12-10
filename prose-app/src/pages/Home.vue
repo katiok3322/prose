@@ -39,8 +39,7 @@
           <p class="hero-sub">знакомьтесь с нашими ← предложениями</p>
 
           <div class="hero-buttons">
-            <router-link to="/price" class="btn-purple">наши</router-link>
-            <router-link to="/price" class="btn-purple">программы</router-link>
+            <router-link to="/price" class="btn-purple">наши программы</router-link>
           </div>
         </div>
       </section>
@@ -93,13 +92,432 @@
           </div>
         </div>
       </section>
+      <hr class="divider" />
+      <div class="center-wrapper">
+        <article class="card">
+          <div class="card-image-container-about">
+            <img src="@/assets/specialists/anas.jpg" alt="about" />
+            <div class="card-text-overlay-about">
+              <div class="card-title">О нас</div>
+            </div>
+          </div>
+          <router-link to="/price" class="card-badge-purple-about"
+            >подробнее →</router-link
+          >
+        </article>
+      </div>
+      <hr class="divider" />
+      <div class="newsletter-minimalist">
+        <div class="newsletter-minimalist-content">
+          <h1>Будьте в курсе новостей</h1>
+
+          <p class="lead-text">
+            Подпишитесь на рассылку и получайте информацию об акциях, новых процедурах и
+            полезные советы по уходу за собой:
+          </p>
+
+          <div class="minimalist-form-container">
+            <form id="minimalistNewsletterForm">
+              <ul class="newsletter-minimalist-list">
+                <!-- Поле email -->
+                <li class="email-item">
+                  Ваш email
+                  <input
+                    type="email"
+                    class="email-input-minimalist"
+                    placeholder="example@mail.com"
+                    required
+                  />
+                </li>
+
+                <!-- Чекбокс согласия -->
+                <li>
+                  <label class="checkbox-item">
+                    <input type="checkbox" required />
+                    <span class="custom-checkbox"></span>
+                    <span class="checkbox-label"
+                      >Соглашаюсь с политикой конфиденциальности и обработкой персональных
+                      данных</span
+                    >
+                  </label>
+                </li>
+
+                <!-- Преимущества с галочками -->
+                <li class="with-check">Только полезная информация</li>
+                <li class="with-check">Без спама</li>
+                <li class="with-check">Отписаться можно в любой момент</li>
+              </ul>
+
+              <div class="separator-line"></div>
+
+              <button type="submit" class="subscribe-btn-minimalist">Подписаться</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("minimalistNewsletterForm");
+  const emailInput = form.querySelector(".email-input-minimalist");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const email = emailInput.value.trim();
+    const policyAgreed = form.querySelector('input[type="checkbox"]').checked;
+
+    // Валидация
+    if (!email) {
+      alert("Пожалуйста, введите ваш email");
+      emailInput.focus();
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      alert("Пожалуйста, введите корректный email адрес");
+      emailInput.focus();
+      return;
+    }
+
+    if (!policyAgreed) {
+      alert("Для подписки необходимо согласие с политикой конфиденциальности");
+      return;
+    }
+
+    // Эффект успешной отправки
+    const submitBtn = form.querySelector(".subscribe-btn-minimalist");
+    const originalText = submitBtn.textContent;
+    const originalBg = submitBtn.style.background;
+
+    submitBtn.textContent = "✓ Подписка оформлена!";
+    submitBtn.style.background = "#4CAF50";
+    submitBtn.style.color = "white";
+    submitBtn.disabled = true;
+
+    // Сброс через 3 секунды
+    setTimeout(() => {
+      form.reset();
+      submitBtn.textContent = originalText;
+      submitBtn.style.background = originalBg;
+      submitBtn.style.color = "#5f81ca";
+      submitBtn.disabled = false;
+
+      // Показать временное сообщение
+      const message = document.createElement("div");
+      message.textContent = "Спасибо за подписку! Проверьте вашу почту.";
+      message.style.cssText = `
+        background: rgba(76, 175, 80, 0.9);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 6px;
+        margin-top: 20px;
+        font-size: 14px;
+        animation: fadeIn 0.3s ease;
+      `;
+
+      form.appendChild(message);
+
+      setTimeout(() => {
+        message.style.opacity = "0";
+        setTimeout(() => message.remove(), 300);
+      }, 3000);
+    }, 3000);
+
+    console.log("Email для рассылки:", email);
+  });
+
+  // Автофокус на поле email
+  emailInput.focus();
+});
+</script>
 
 <style scoped>
+/* Основные стили для формы в стиле макета */
+.newsletter-minimalist {
+  background: linear-gradient(135deg, #5f81ca 0%, #8249c4 100%);
+  padding: 70px 20px;
+  margin: 60px 0 0 0;
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: white;
+}
+
+.newsletter-minimalist-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Заголовок H1 */
+.newsletter-minimalist h1 {
+  font-size: 36px;
+  font-weight: 400;
+  margin: 0 0 20px 0;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+  color: white;
+}
+
+/* Основной текст под заголовком */
+.newsletter-minimalist .lead-text {
+  font-size: 17px;
+  line-height: 1.6;
+  margin: 0 auto 35px;
+  max-width: 700px;
+  opacity: 0.95;
+}
+
+/* Список элементов формы */
+.newsletter-minimalist-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto 30px;
+  text-align: left;
+  max-width: 600px;
+  font-size: 16px;
+}
+
+.newsletter-minimalist-list li {
+  margin-bottom: 18px;
+  padding-left: 30px;
+  position: relative;
+  line-height: 1.5;
+}
+
+/* Галочки для полезной информации */
+.newsletter-minimalist-list li.with-check::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Поле email с подчеркиванием */
+.email-item {
+  position: relative;
+}
+
+.email-item::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Чекбокс в стиле подчеркивания */
+.checkbox-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.checkbox-item input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.custom-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 3px;
+  flex-shrink: 0;
+  position: relative;
+  margin-left: -30px;
+}
+
+.checkbox-item input:checked ~ .custom-checkbox {
+  background: white;
+  border-color: white;
+}
+
+.checkbox-item input:checked ~ .custom-checkbox::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #5f81ca;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.checkbox-item input:focus ~ .custom-checkbox {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.checkbox-label {
+  flex: 1;
+}
+
+/* Разделитель */
+.separator-line {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 35px auto;
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Кнопка подписки */
+.subscribe-btn-minimalist {
+  background: white;
+  color: #5f81ca;
+  border: none;
+  padding: 18px 50px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+  margin-top: 10px;
+  text-decoration: none;
+  font-family: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.subscribe-btn-minimalist:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+  color: #8249c4;
+}
+
+.subscribe-btn-minimalist:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+.subscribe-btn-minimalist:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
+}
+
+/* Контейнер для формы */
+.minimalist-form-container {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 40px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Стили для самого поля ввода email */
+.email-input-minimalist {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 0;
+  font-size: 16px;
+  color: white;
+  margin-top: 5px;
+  transition: border-color 0.3s ease;
+}
+
+.email-input-minimalist:focus {
+  outline: none;
+  border-bottom-color: white;
+}
+
+.email-input-minimalist::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .newsletter-minimalist {
+    padding: 50px 15px;
+    margin: 40px 0 0 0;
+  }
+
+  .newsletter-minimalist h1 {
+    font-size: 30px;
+  }
+
+  .newsletter-minimalist .lead-text {
+    font-size: 16px;
+    margin-bottom: 25px;
+  }
+
+  .minimalist-form-container {
+    padding: 30px 20px;
+  }
+
+  .newsletter-minimalist-list {
+    font-size: 15px;
+  }
+
+  .newsletter-minimalist-list li {
+    padding-left: 25px;
+    margin-bottom: 15px;
+  }
+
+  .subscribe-btn-minimalist {
+    padding: 16px 40px;
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 480px) {
+  .newsletter-minimalist h1 {
+    font-size: 26px;
+  }
+
+  .newsletter-minimalist .lead-text {
+    font-size: 15px;
+  }
+
+  .minimalist-form-container {
+    padding: 25px 15px;
+  }
+
+  .newsletter-minimalist-list li {
+    padding-left: 22px;
+  }
+
+  .newsletter-minimalist-list li.with-check::before {
+    font-size: 16px;
+  }
+
+  .subscribe-btn-minimalist {
+    width: 100%;
+    padding: 16px 20px;
+  }
+}
+
+/* Дополнительные эффекты */
+.newsletter-minimalist-list li {
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.newsletter-minimalist-list li:hover {
+  opacity: 1;
+}
+
+.checkbox-item:hover .custom-checkbox {
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.email-input-minimalist:hover {
+  border-bottom-color: rgba(255, 255, 255, 0.6);
+}
 .container {
   width: 1440px;
   margin: 0 auto;
@@ -299,7 +717,58 @@
   object-fit: cover;
   display: block;
 }
+/* Новый контейнер-обертка */
+.card-section-about {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 0;
+}
 
+/* Существующие стили остаются без изменений */
+.card-image-container-about {
+  display: flex;
+  gap: 30px;
+  width: 98%;
+  max-width: 600px; /* Ограничиваем максимальную ширину */
+  height: 380px;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.card-image-container-about img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-text-overlay-about {
+  position: absolute;
+  top: 343px;
+  left: 39px;
+  text-align: left;
+  color: rgb(0, 0, 0);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+.center-wrapper {
+  height: 110%;
+  width: 120%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 10vh; /* Занимает всю высоту экрана */
+  padding: 20px;
+}
+
+.card-title-about {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
 .card-text-overlay {
   position: absolute;
   top: 60px;
@@ -344,6 +813,23 @@
   box-shadow: 0 6px 15px rgba(95, 129, 202, 0.4);
   color: white;
 }
+.card-badge-purple-about {
+  position: absolute;
+  left: 16px;
+  top: 310px;
+  background: linear-gradient(135deg, #5f81ca 0%, #8249c4 100%);
+  border-radius: 14px;
+  padding: 6px 12px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  z-index: 2;
+  text-decoration: none;
+  color: white;
+  display: inline-block;
+  box-shadow: 0 4px 10px rgba(95, 129, 202, 0.3);
+}
 
 .divider {
   margin: 32px 0;
@@ -360,7 +846,7 @@
 }
 .promo-grid {
   display: flex;
-  gap: 20px;
+  gap: 370px;
 }
 
 .promo-left,
